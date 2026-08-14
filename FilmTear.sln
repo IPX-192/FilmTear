@@ -1,0 +1,75 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginParam", "Plugins\PluginParam\PluginParam.vcxproj", "{D09AFF14-05AC-3108-B99C-65277BE99605}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginDevice", "Plugins\PluginDevice\PluginDevice.vcxproj", "{9B27F999-3EF8-3917-84A4-449A4B2922C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09AFF14-05AC-3108-B99C-65277BE99605} = {D09AFF14-05AC-3108-B99C-65277BE99605}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginAutoPage", "Plugins\PluginAutoPage\PluginAutoPage.vcxproj", "{DC606BF0-E9B6-3B16-AA86-37C1B0BEBFA0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09AFF14-05AC-3108-B99C-65277BE99605} = {D09AFF14-05AC-3108-B99C-65277BE99605}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginManualDebug", "Plugins\PluginManualDebug\PluginManualDebug.vcxproj", "{571B8C58-353C-3242-AAE8-DF30CDB90334}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09AFF14-05AC-3108-B99C-65277BE99605} = {D09AFF14-05AC-3108-B99C-65277BE99605}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginProductSet", "Plugins\PluginProductSet\PluginProductSet.vcxproj", "{6A150B17-4BD0-3EF5-90B5-0C4ADB95671F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09AFF14-05AC-3108-B99C-65277BE99605} = {D09AFF14-05AC-3108-B99C-65277BE99605}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginSystemSet", "Plugins\PluginSystemSet\PluginSystemSet.vcxproj", "{5232A459-3B66-38C2-BE85-92E5C7C02B4F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09AFF14-05AC-3108-B99C-65277BE99605} = {D09AFF14-05AC-3108-B99C-65277BE99605}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginMeasureProcess", "Plugins\PluginMeasureProcess\PluginMeasureProcess.vcxproj", "{D61E60BC-47CB-357A-B7D5-92AD98CAD663}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09AFF14-05AC-3108-B99C-65277BE99605} = {D09AFF14-05AC-3108-B99C-65277BE99605}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D09AFF14-05AC-3108-B99C-65277BE99605}.Debug|x64.ActiveCfg = Debug|x64
+		{D09AFF14-05AC-3108-B99C-65277BE99605}.Debug|x64.Build.0 = Debug|x64
+		{D09AFF14-05AC-3108-B99C-65277BE99605}.Release|x64.ActiveCfg = Release|x64
+		{D09AFF14-05AC-3108-B99C-65277BE99605}.Release|x64.Build.0 = Release|x64
+		{9B27F999-3EF8-3917-84A4-449A4B2922C1}.Debug|x64.ActiveCfg = Debug|x64
+		{9B27F999-3EF8-3917-84A4-449A4B2922C1}.Debug|x64.Build.0 = Debug|x64
+		{9B27F999-3EF8-3917-84A4-449A4B2922C1}.Release|x64.ActiveCfg = Release|x64
+		{9B27F999-3EF8-3917-84A4-449A4B2922C1}.Release|x64.Build.0 = Release|x64
+		{DC606BF0-E9B6-3B16-AA86-37C1B0BEBFA0}.Debug|x64.ActiveCfg = Debug|x64
+		{DC606BF0-E9B6-3B16-AA86-37C1B0BEBFA0}.Debug|x64.Build.0 = Debug|x64
+		{DC606BF0-E9B6-3B16-AA86-37C1B0BEBFA0}.Release|x64.ActiveCfg = Release|x64
+		{DC606BF0-E9B6-3B16-AA86-37C1B0BEBFA0}.Release|x64.Build.0 = Release|x64
+		{571B8C58-353C-3242-AAE8-DF30CDB90334}.Debug|x64.ActiveCfg = Debug|x64
+		{571B8C58-353C-3242-AAE8-DF30CDB90334}.Debug|x64.Build.0 = Debug|x64
+		{571B8C58-353C-3242-AAE8-DF30CDB90334}.Release|x64.ActiveCfg = Release|x64
+		{571B8C58-353C-3242-AAE8-DF30CDB90334}.Release|x64.Build.0 = Release|x64
+		{6A150B17-4BD0-3EF5-90B5-0C4ADB95671F}.Debug|x64.ActiveCfg = Debug|x64
+		{6A150B17-4BD0-3EF5-90B5-0C4ADB95671F}.Debug|x64.Build.0 = Debug|x64
+		{6A150B17-4BD0-3EF5-90B5-0C4ADB95671F}.Release|x64.ActiveCfg = Release|x64
+		{6A150B17-4BD0-3EF5-90B5-0C4ADB95671F}.Release|x64.Build.0 = Release|x64
+		{5232A459-3B66-38C2-BE85-92E5C7C02B4F}.Debug|x64.ActiveCfg = Debug|x64
+		{5232A459-3B66-38C2-BE85-92E5C7C02B4F}.Debug|x64.Build.0 = Debug|x64
+		{5232A459-3B66-38C2-BE85-92E5C7C02B4F}.Release|x64.ActiveCfg = Release|x64
+		{5232A459-3B66-38C2-BE85-92E5C7C02B4F}.Release|x64.Build.0 = Release|x64
+		{D61E60BC-47CB-357A-B7D5-92AD98CAD663}.Debug|x64.ActiveCfg = Debug|x64
+		{D61E60BC-47CB-357A-B7D5-92AD98CAD663}.Debug|x64.Build.0 = Debug|x64
+		{D61E60BC-47CB-357A-B7D5-92AD98CAD663}.Release|x64.ActiveCfg = Release|x64
+		{D61E60BC-47CB-357A-B7D5-92AD98CAD663}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

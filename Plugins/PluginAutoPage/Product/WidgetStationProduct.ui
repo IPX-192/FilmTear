@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WidgetStationProduct</class>
+ <widget class="QWidget" name="WidgetStationProduct">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>502</width>
+    <height>353</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" rowstretch="1,1" columnstretch="1,1">
+   <item row="0" column="0">
+    <widget class="TableProduct" name="tableProduct" native="true"/>
+   </item>
+   <item row="0" column="1">
+    <widget class="TableNGSort" name="tableNGSort" native="true"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="ChartProduceHour" name="produceHour" native="true"/>
+   </item>
+   <item row="1" column="1">
+    <widget class="ChartNGSort" name="chartNGSort" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TableProduct</class>
+   <extends>QWidget</extends>
+   <header>TableProduct.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TableNGSort</class>
+   <extends>QWidget</extends>
+   <header>TableNGSort.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ChartProduceHour</class>
+   <extends>QWidget</extends>
+   <header>ChartProduceHour.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ChartNGSort</class>
+   <extends>QWidget</extends>
+   <header>ChartNGSort.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

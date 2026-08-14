@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WidgetLogAll</class>
+ <widget class="QWidget" name="WidgetLogAll">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>801</width>
+    <height>538</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled{
+	border: 1px solid gray;
+}
+
+</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="3">
+    <widget class="QGroupBox" name="groupBox_8">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#groupBox_5
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title#groupBox_5
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled#groupBox_5{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled #groupBox_5{
+	border: 1px solid gray;
+}
+
+</string>
+     </property>
+     <property name="title">
+      <string>上料壳体</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_18" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_FeedHolder" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QGroupBox" name="groupBox_9">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#groupBox_5
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title#groupBox_5
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled#groupBox_5{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled #groupBox_5{
+	border: 1px solid gray;
+}
+
+</string>
+     </property>
+     <property name="title">
+      <string>PCB清洗</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_19" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_PCBClean" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QGroupBox" name="groupBox_7">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#groupBox_5
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title#groupBox_5
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled#groupBox_5{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled #groupBox_5{
+	border: 1px solid gray;
+}
+
+</string>
+     </property>
+     <property name="title">
+      <string>上料PCB</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_17" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_FeedPCB" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>400</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="title">
+      <string>治具2</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_13" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_Fixture2" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QGroupBox" name="groupBox_6">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>400</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="title">
+      <string>治具4</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_16" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_Fixture4" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#groupBox_5
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title#groupBox_5
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled#groupBox_5{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled #groupBox_5{
+	border: 1px solid gray;
+}
+
+</string>
+     </property>
+     <property name="title">
+      <string>治具1</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_12" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_Fixture1" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#groupBox_5
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title#groupBox_5
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled#groupBox_5{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled #groupBox_5{
+	border: 1px solid gray;
+}
+
+</string>
+     </property>
+     <property name="title">
+      <string>流水线</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_14" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_PipeLine" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>400</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="title">
+      <string>治具3</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_15" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_Fixture3" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox_10">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#groupBox_5
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title#groupBox_5
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled#groupBox_5{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled #groupBox_5{
+	border: 1px solid gray;
+}
+
+</string>
+     </property>
+     <property name="title">
+      <string>前后连线</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_20" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_PipeLineOnline" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox_11">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox#groupBox_5
+{
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 17px;
+ 
+} 
+QGroupBox::title#groupBox_5
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled#groupBox_5{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled #groupBox_5{
+	border: 1px solid gray;
+}
+
+</string>
+     </property>
+     <property name="title">
+      <string>转盘上料</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_21" rowstretch="0,0">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0" rowspan="2">
+       <widget class="WidgetLog" name="widget_TurntableGrab" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetLog</class>
+   <extends>QWidget</extends>
+   <header>../Common/WidgetLog.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

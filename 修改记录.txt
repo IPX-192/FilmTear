@@ -1,0 +1,233 @@
+1.PluginMeasureProcess.cpp:107-108
+VisAppBus::sendEvent("InTrayTask", FeedHolder);
+VisAppBus::sendEvent("InTrayTask", FeedPCB);
+
+2.CylinderCtrl.cpp:22,38（CheckIoState 两个重载）
+if (GlobalParam->flagOffline)return 0;
+改为：if (GlobalParam->flagOffline || GlobalParam->emptyRun)return 0;
+说明：空跑模式下跳过所有IO状态检查，避免空跑时料仓/气缸检查报错
+
+
+3.Grab\ThreadBox.cpp:129,144（CheckFeedBox 每层有盘检测）
+if (GlobalParam->flagOffline) level = IO_ON;
+改为：if (GlobalParam->flagOffline || GlobalParam->emptyRun) level = IO_ON;
+说明：空跑时每层料盘视为有盘，自动进盘流程能走通
+
+
+4.Grab\ThreadBox.cpp:180-184（ProcessTray 进盘）
+新增：空跑且为壳体(FeedHolder)时，取料电机停在等待位(Y=0)不进料仓取盘，直接返回
+
+
+5.PipeLine\UdpServer.cpp:190-193（TransTrayToNext 末尾）
+新增：空跑/离线时载具送出后，模拟空载具回流到空盘缓存位 sigSetBackFlowReady(true)，维持载具循环
+
+
+6.Grab\TurntableWorkStep.h（新增方法）
+bool IsFinished(){return m_nextStep >= EndStep;}   //所有工序(撕膜/清洗/脏污/下料)是否走完
+
+
+7.Grab\TurntableProcess.cpp:67-76（doTask 等新料条件）
+修改前：首模组不在当前治具位就 WaitBlankAndNewPCB 等新料（撕膜结束后转盘就停止）
+修改后：所有PCB走完工序(allPCBFinished)才等新料，单托盘也能走完转盘4个工序
+
+8.WidgetRecipeGrip.cpp;77
+屏蔽夹持力
+
+9.WidgetManualCtl.cpp:128-133（手动调试界面）
+清洗按钮旁新增"测试"按钮，逻辑暂空，待确认测试内容
+
+10.WidgetManualCtl.cpp:129-143（手动调试界面）
+"测试"按钮逻辑：IN49(IN_FilmTearDetect)绿灯(ON)时撕膜旋转R1顺时针连续旋转，变红灯(OFF)停止，等待超时30秒
+
+11.WidgetManualCtl.cpp:11
+补 using namespace VisMotorToolSpace; 修复 VisMotorManager 未声明编译错误
+
+12.WidgetManualCtl.cpp:138（测试按钮）
+撕膜旋转R1旋转前加 InitUserParamSpeed(MotorFilmtearR1, 0.1) 降速
+
+13.FilmTearNode.cpp:78-88,105-110（撕膜流程）
+撕膜位(FileTearWork)后加：R1顺时针旋转(0.1速度)，IN49绿灯(ON)旋转、变红灯(OFF)停；检测位IN49"撕膜失败"判断屏蔽
+
+14.WidgetRecipeTray.cpp:284-330（计算料盘按钮）
+屏蔽旧三点插值逻辑；新逻辑：第一行所有点实测(X不均匀)，行间等距用第一行第一个+最后一排第一个算出其余行
+
+15.TurntableGrab.cpp:146 / ThreadFeed.cpp:232 / FilmTearNode.cpp:153 / PCBCleanNode.cpp:105（夹爪开合）
+确认：闭合固定10(不改)，张开按伺服配方(MovePositionAbs GripOpen，如3.3)；流线清洗夹爪ThreadClean.cpp同规则
+
+16.ParamDef.h:217-226（新增 RecipeDirty 类）
+脏污检测配方类：modelPath(模型路径)、threshold(OK/NG阈值)、maskThreshold(mask阈值)、enableOpenvino(OpenVINO)、intraThreads(线程数)
+ParamManager.h/+recipeDirty成员、ParamManager.cpp/+REGISTER注册
+
+17.ParamDef.h:218(RecipeDirty类) + ParamManager + WidgetRecipeDirty.h/.cpp/.ui + WidgetProductSet + .pro
+新增脏污配方完整链路：模型路径/OK-NG阈值/mask阈值/OpenVINO/推理线程数 5个字段；产品界面新tab
+
+18.ParamDef.h:RecipeDirty类
+加 operator= 内联实现（字段逐一拷贝），修复 C2280 编译错误（QObject 禁止默认拷贝）
+
+19.PluginMeasureProcess.pro:116-117
+修正 VisAnomalyDetect 链接：去掉 INCLUDEPATH 的 -L 和 LIBS 的重复 -L-L
+
+20.WidgetVision.h/.cpp/.ui（PluginAutoPage）
+右边新增"脏污视觉"区域(ImageCanvas+测试按钮)，订阅ShowDirtyImg显示脏污图像；测试按钮显示"Test Dirty OK"文字
+
+21.CylinderCtrl.cpp:56,102（SetDoubleIOOut两个重载）+ PluginMeasureProcess.cpp:484（ErrorMessageSignal）
+空跑模式下跳过气缸IO等待(SetDoubleIOOut)和电机到位误差急停(ErrorMessageSignal)，让转盘上料流程继续
+
+22.PipeLineManager.cpp:249-256（MoveTrayToTurntable）
+空跑时跳过转盘处传感器20秒等待(SelectIoInput)，模拟500ms载具到位，解决流水线载具送不到转盘上料处
+
+23.屏蔽第21/22条改动
+还原CylinderCtrl(SetDoubleIOOut emptyRun)、PluginMeasureProcess(ErrorMessageSignal emptyRun)、PipeLineManager(转盘处传感器跳过)，转盘上料到位检查恢复原样
+
+24.WidgetProdutData.h/.cpp/.ui（ProductForm）重构
+改为4个tab页(治具1-4)，每tab含:ProductDetailForm表格+对位图像(ImageCanvas)+脏污图像(ImageCanvas)+测试按钮；订阅ShowCalibImage/ShowDirtyImg事件；WidgetAutoPage移除WidgetCalibImage/WidgetVision页面
+
+25.ParamDef.h:32 + PluginDevice.cpp:120
+新增下料对位相机宏BlankCam，InitOtherCam初始化5个相机
+
+26.ParamDef.h:31-33
+相机宏改名:FeedTurntableCam→"组装俯拍",BlankCam→"组装仰拍"
+
+27.WidgetRecipeDirty.ui/.h/.cpp
+模型路径改文件选择框(+浏览按钮);删OpenVINO/推理线程数两行;说明文字同步更新
+
+28.ParamDef.h + WidgetRecipeDirty.ui/.h/.cpp
+模型路径拆为两个:modelPath(ONNX文件夹)+modelPathMtr(MTR文件夹)，各带浏览按钮选文件夹
+
+29.DirtyNode.h/.cpp（集成脏污检测算法）
+InitDetector(EAD_Create+EAD_Init+InitModel MTR);Process预处理+EAD_DetectMat判定NG+mask叠加红标;AutoStart加载模型
+
+30.DirtyNode(+/event_TestDetect) + PluginMeasureProcess(+/event_TestDirtyDetect) + WidgetProdutData(测试按钮+ShowResultImage)
+测试按钮点→sendEvent(TestDirtyDetect)→DirtyNode抓图+算法检测→ShowDirtyImg(脏污图)+ShowResultImage(NG红色标记文字)
+
+31.DirtyNode(.h/.cpp)+PluginMeasureProcess(.h/.cpp)+WidgetProdutData 屏蔽算法库
+VisAnomalyDetect相关代码用#if 0包住；Process恢复抓图+显示原图；测试按钮恢复文字显示
+
+32.WidgetSingleTest.ui/.h/.cpp（简化）
+4个按钮精简为1个"结束生产"按钮，删右工位/治具夹紧/重复测试，点击发AutoPause事件
+
+33.TurntableWorkStep.h:28 + TurntableProcess.cpp:67-76
+还原第7条：删除IsFinished()方法；doTask等新料条件恢复原版(首模组不在当前治具位即WaitBlankAndNewPCB)
+
+34.ThreadFeed.h:36-37 + ThreadFeed.cpp:301-304,179-182（PlaceModule死等修复）
+m_waitBlankTray/m_traySkip改用std::atomic(跨线程可见);第5托盘起空壳体流走时设标志解锁,PlaceModule跳出后再调sigBlankPipeLineTray重置
+
+35.ThreadFeed.cpp:180-184,208-210 + PluginMeasureProcess.cpp:607,266（接驳台伸出/缩回）
+壳体上料前伸出固定托盘(SetDoubleIoOutput 24ON 23OFF),上完后缩回流走(23ON 24OFF);InitIO和复位时间步缩回;与顶升逻辑一致
+
+37.TurntableGrab.cpp:226-229（GrabTurntablePCB 下料抓取）
+闭合夹爪后加上升(SetTurntableGripUp(1,true))，夹爪移回安全位时在高位避免碰撞
+
+38.PipeLineManager.cpp:160-169（MoveTrayToHolder 接驳线传感器等待）
+超时后循环弹窗+重新等20秒,点确定放盘后自动继续,取消才返回错误
+
+41.ThreadFeed.cpp:176-179（PlaceModule等载具）
+while循环加IO兜底:直接读IN_PipeLinePCB(载具到位传感器),事件不来则IO自救,跳出等待
+
+42.WidgetPressDispDebug.cpp:122,234 + WidgetLightCtl.cpp:138
+连接按钮toggled→clicked+isChecked(),修复刚运行时点击按钮checked错误为false的问题
+
+43.PluginDevice.cpp + WidgetPressDispDebug.h/.cpp + PressureSensorClient.h
+传感器从InitDevice(线程池)→OnInitialized(主线程)解决读数无响应;PressDispSensorReady通知界面按钮启用;IsConnected事件已删;BaudRate统一toInt
+
+44.WidgetSingleTest.cpp + PluginMeasureProcess.h/.cpp + UdpServer.cpp（结束生产按钮）
+btnEndProduct→SetProductEnd(true)+SetClearFlag清料;UdpServer查productEnd写入TrayInfo;复位成功productEnd=false
+
+45.WidgetRecipeVision.cpp ReadCameraNameList QXmlStreamReader重写 + LoadRecipeFile Init后补发相机和光源列表 + filepath空值兜底 + event_GetCvMatCam签名对齐加cv::Mat&
+46.AlgorithmConfig.xml 形状模板匹配Station下Params清空只保留Station空标签
+47.bin/Config/Light.xml 新增光源配置文件 + ReadLightNameList + LoadRecipeFile发setLightMapping
+
+
+49.ThreadBox.h/.cpp（手动拉料走自动流程完整检查路径+CheckFeedBox失败补日志）
+新增m_manualLayer(-1=自动扫描,>=0=仅该层);手动分支在QueryInPos之前:先MotorMoveAbs移取料电机Y到等待位→Z到检查位→IO检测有盘/无盘;
+CheckFeedBox所有失败路径补ShowLog;event_InTrayTaskLayer/event_BlankTrayLayer入口UpdateBoxParam()重载点位+m_listTask.clear()清退盘队列;退料保持m_listTask队列
+
+49-2.ThreadBox.cpp:243-258（空跑模式取料电机有盘跳过进料箱）
+ProcessTray进盘时:emptyRun且取料电机两个倾斜IO全ON(有盘)→打日志"空跑模式:取料电机已有托盘,跳过进料箱"直接返回成功;
+无盘则正常进料箱;非空跑模式保持原CheckIoState弹窗逻辑
+
+50.ThreadBox.h:29 + ThreadBox.cpp:39-58（料仓多层Z间距支持）
+FeedBoxParam新增layerPitchZ层间距；UpdateBoxParam提取首层Z基准值，每层Z=基准+i*间距；
+壳体间距-46.244，PCB暂设0(等实测)；Y值全层不变
+
+51.ThreadBox.cpp:199-285（ProcessTray:MovePositionAbs→MotorMoveAbs+所有失败补日志）
+MovePositionAbs→MotorMoveAbs(199,273,276行):HolderBoxMotorWait在XML中无Point值→"点位未配置"急停;
+所有MotorMoveAbs失败前设m_errInfo+ShowLog打出具体轴和errcode
+
+54.ThreadBox.cpp:49-56（Z轴硬件限位clamp）
+第5层Z算得-440.482超出硬限位→"到位误差超过0.1"急停;循环中加zLimitMin=-439.1下限;
+壳体Z超出此值自动clamp,PCB不限(-1e9)
+
+53.CylinderCtrl.cpp:44 + PluginMeasureProcess.cpp:393（CheckIoState(QStringList)重检normalLevel越界）
+normalLevel只push一个但iocheck有两个IO→重检读normalLevel[1]脏数据意外放行→取料电机有盘仍进料箱;
+改为循环push确保与iocheck等长;PopupErrNotify重检加i>=normalLevel.size()越界保护
+
+55.WidgetRecipeTray.cpp:284-330（料盘点位计算按产品分流）
+curProduct=="EQ4-100"走新逻辑(第一行实测+行间等距),其他产品走旧逻辑(三点插值)
+
+56.TrayRfidManager.cpp:82（COM口号自动转大写）
+setRfidParm加comName.toUpper();界面输入小写com10自动转COM10,解决RFID初始化失败
+
+57.CModbusRFIDClient.cpp:91-125,244-258,348（RFID读条码加调试日志+补m_errInfo）
+GetModbusTrayCode关键失败点打Log_Debug;slotSendData异步响应非NoError时补m_errInfo;
+datavalid=false且m_errInfo空时补兜底错误;SendData跨线程invokeMethod返回值未检查→失败无声,
+加invokeMethod判断失败设m_errInfo"目标线程无事件循环"
+
+58.CModbusRFIDClient.cpp:354 + TrayRfidForm.cpp:66,86（急停状态读条码弹窗报错）
+WaitTime急停时设m_errInfo"急停中,RFID读取被终止"+Log_Error;
+TrayRfidForm读写条码按钮前检查IsEmgStop,急停弹窗"请先清除急停"
+
+59.PluginDevice.cpp:94-105 + TrayRfidForm.h/.cpp + PipeLineManager.cpp:120-148（托盘RFID全链路）
+PluginDevice初始化时addRfid(FeedPCB)注册读码器+setRfidParm(comPort/StrbaudRate)+connect自动连接,
+成功发ScanTrayReady事件;TrayRfidForm订阅ScanTrayReady→串口按钮变"已打开"+m_comOpened=true;
+PipeLineManager托盘到达PCB工位时ReadRfidTag读码写入TrayInfo.holderBarCode,失败打Log_Error;
+原有GetModbusTrayCode读trayCode与上游比对逻辑保留
+
+60.UdpServer.cpp:66-68（slotPostState删假值,改用流程真实TrayInfo）
+删m_trayInfo.empty=false/trayCode="cpc_xxx"/holderBarCode="123"三行假值;
+m_trayInfo由event_SetPipeLineOutStatus(转盘下料TurntableGrab传入)保存真实值,每200ms定时上报下游不再被覆盖
+
+61.ThreadFeed.cpp:74-80,149-163,214-227 + PipeLineManager.cpp:120-137（壳体扫码屏蔽+PCB扫码移到上料后）
+Process删除前置ScanCode;PlaceModule放置完成后(Z已到安全位)FeedPCB调ScanCode:
+移到PCBScanCode扫码位→GetBarCode→回安全位→sigBlankPipeLineTray托盘移走;
+ScanCode恢复真实条码赋值m_vecFeedModule[0]=barCode(原假值barCode+序号);
+壳体无二维码扫码屏蔽:FeedHolder给holderBarCode假数据QString("Holder%1").arg(m_grabIndex);
+PipeLineManager撤销RFID读码写holderBarCode(托盘码/壳体码/PCB码无关联),RFID只读trayCode与上游比对
+
+62.ParamDef.h:303-304 + WidgetBox.ui/.h/.cpp(新建) + WidgetSystemSet.ui/.cpp + PluginSystemSet.pro + ThreadBox.cpp:48-49（系统设置加料箱参数）
+HardwareParam新增holderBoxPitch("-46.244")/pcbBoxPitch("0")料箱层间Z间距(QString,配QLineEdit文本输入框);
+新建WidgetBox页面(参照WidgetGrip):壳体料箱间距/PCB料箱间距两行QLineEdit;
+WidgetSystemSet左侧导航加"料箱参数"按钮btnBox_3,点击切换stackedWidget索引2;
+ThreadBox.layerPitchZ从硬编码-46.244改为读配置holderBoxPitch/pcbBoxPitch.toDouble()
+
+63.PluginDevice.cpp:137-163（相机打开失败重试优化）
+快速重启软件时驱动资源未释放/网络未注册导致-2失败;
+重试5次×2秒,重试前先EnumCamera枚举设备+CloseCamera清残留句柄,
+枚举到设备才OpenCamera;枚举为空打"设备未就绪"日志
+
+64.PluginDevice.h:24 + PluginDevice.cpp:46-73（退出软件时释放相机资源）
+重写OnViewClosing:主窗口关闭时无条件InitOtherCam(false)关相机+断传感器/扫码枪/RFID;
+析构函数去掉m_connectFlag条件无条件清理(双保险);
+解决快速重启软件时相机驱动未释放导致的-2打开失败
+
+65.PluginSystemSet.h/.cpp + MesHttpPost.h + ThreadFeed.cpp:155-168（MES接口总线）
+PluginSystemSet订阅三个总线:MesValidateNumber(条码校验)/MesSaveProcessOpResult(保存工序结果)/
+MesCompleteTask(工序过站),槽内调MesHttpPost接口+成败日志;
+DataDetail加Q_DECLARE_METATYPE总线传参;
+ThreadFeed::ScanCode的FeedPCB扫码后发MesValidateNumber校验PCB条码;
+后两个总线的发送点待定
+
+66.ThreadFeed.cpp:219-233 + DirtyNode.cpp:87-105 + TurntableGrab.cpp:341-349 + FilmTearNode.cpp:183-200（三种NG状态设置）
+扫码失败:PlaceModule里pcbBarCode为空→TrayInfo.result=false,errInfo="扫码失败";
+脏污NG:DirtyNode::Process抓图失败→m_item->result=false,ngReason="脏污NG";
+撕膜NG:ngReason加前缀"撕膜NG:"+具体原因;
+TurntableGrab下料result合并:工序OK不清除上游已设NG,工序NG才覆盖result/errInfo
+
+60.CModbusRFIDClient.h/.cpp（用户手动改动同步记录）
+m_serverAddress 1→2;SetModbusTrayCode重写:奇数长度自动补'\0'对齐寄存器;
+新增TriggerReadCard(写0x0005=1触发读卡);slotSendData的m_replyTimeout访问加m_mtxReplyMap锁保护;
+SendData重试间隔100→600ms;删#include "ParamManager.h"解决C3074编译错误(qvariant.h)
+
+61.TrayRfidForm.cpp:68（读条码方式恢复ReadRfidTag完整流程）
+on_btnGetCode_clicked改用ReadRfidTag(触发读卡→查标签存在→读条码),比直接GetModbusTrayCode可靠,
+避免读到上一次扫描的残留数据;两种方式均已实测可读

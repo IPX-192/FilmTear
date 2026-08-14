@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WidgetCalibImage</class>
+ <widget class="QWidget" name="WidgetCalibImage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>711</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="styleSheet">
+      <string notr="true">QGroupBox
+{
+	background-color: rgb(240, 240, 240);
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 18px;
+} 
+QGroupBox::title
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled {
+	border: 1px solid gray;
+}</string>
+     </property>
+     <property name="title">
+      <string>左工位</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1">
+      <item>
+       <widget class="ImageCanvas" name="widgetRealTimeImg1" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="WidgetLog" name="widget_L" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="styleSheet">
+      <string notr="true">QGroupBox
+{
+	background-color: rgb(240, 240, 240);
+	border: 3px solid gray;
+	border-radius:10px;
+	margin-top:5ex;
+	font-family:楷体;
+	font:bold 18px;
+} 
+QGroupBox::title
+{
+	subcontrol-origin:margin;
+	subcontrol-position:top center;
+	padding:1px;
+}
+QGroupBox::enabled{
+	border: 3px solid gray;
+}
+QGroupBox::!enabled {
+	border: 1px solid gray;
+}</string>
+     </property>
+     <property name="title">
+      <string>右工位</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1">
+      <item>
+       <widget class="ImageCanvas" name="widgetRealTimeImg2" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="WidgetLog" name="widget_R" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ImageCanvas</class>
+   <extends>QWidget</extends>
+   <header location="global">ImageCanvas.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetLog</class>
+   <extends>QWidget</extends>
+   <header>../../Common/WidgetLog.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
