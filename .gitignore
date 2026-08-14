@@ -25,3 +25,4 @@
 /Plugins/PluginMeasureProcess/测试数据
 *.vcxproj
 FilmTear.VC.db
+Makefile

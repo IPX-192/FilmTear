@@ -142,7 +142,7 @@ public:
     QVector<QPair<QString,IRecipeBase*>>    vecRecipeNode;        //所有配方中文名+对应配方实例
     QVector<QVector<QPair<QString,QString>>>    vecRecipeDetail;    //机种+配方配置映射(配方中文名+值)
  	MatrixSetting*   curMatrix=nullptr;
-    QString          curProduct = "FVM21";       //当前产品型号
+    QString          curProduct = "AM57";       //当前产品型号
     void  UpdateRecipe();
 };
 
@@ -186,6 +186,12 @@ public:
     Property_Var(int, holderLayerCols, 1)
     Property_Var(int, pcBLayerRows, 5)
     Property_Var(int, pcBLayerCols, 1)
+
+    //PCB扫码DataMatrix识别ROI(相机图像坐标)
+    Property_Var(int, pcbScanRoiX, 0)
+    Property_Var(int, pcbScanRoiY, 0)
+    Property_Var(int, pcbScanRoiW, 0)
+    Property_Var(int, pcbScanRoiH, 0)
 
     //具体托盘点位坐标
     QVector<QVector4D> feedTrayPosHolder;

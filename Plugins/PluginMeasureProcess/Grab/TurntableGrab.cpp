@@ -142,8 +142,8 @@ int TurntableGrab::SetGripClose(int index,bool close)
 {
 	int nRes = 0;
 	if (close) {
-		//闭合夹爪:固定到10(张开按伺服配方)
-        nRes = VisMotorInstance->MotorMoveAbs(index ? MotorTurntableBlankGripX : MotorTurntableFeedGripX, 10);
+        //闭合夹爪:固定到0(张开按伺服配方)
+        nRes = VisMotorInstance->MotorMoveAbs(index ? MotorTurntableBlankGripX : MotorTurntableFeedGripX, 0);
 		if (nRes != 0) return nRes;
 		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}

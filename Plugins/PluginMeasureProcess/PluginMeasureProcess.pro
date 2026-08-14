@@ -115,3 +115,10 @@ DEPENDPATH += $$(PATH_VIS)/opencv/include
 
 INCLUDEPATH += $$PWD/../../3rd/VisAnomalyDetect
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../3rd/VisAnomalyDetect/ -lVisAnomalyDetect
+
+INCLUDEPATH += $$PWD/../../3rd/VisDataMatrixFind
+DEPENDPATH += $$PWD/../../3rd/VisDataMatrixFind
+win32: LIBS += -L$$PWD/../../3rd/VisDataMatrixFind/ -lVisDataMatrixFind
+
+INCLUDEPATH += $$PWD/../../3rd/OpenCV/include
+win32: LIBS += -L$$PWD/../../3rd/OpenCV/x64/ -lopencv_world490

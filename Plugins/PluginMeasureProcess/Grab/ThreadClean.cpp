@@ -100,7 +100,7 @@ int ThreadClean::SetGripClose(bool close)
 {
 	int nRes = 0;
 	if (close) {
-		nRes = VisMotorInstance->MotorMoveAbs(MotorCleanGripX, 10);
+		nRes = VisMotorInstance->MotorMoveAbs(MotorCleanGripX, 0);
 		if (nRes != 0) return nRes;
 		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}

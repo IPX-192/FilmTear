@@ -41,7 +41,7 @@ int PluginParam::OnInitialized()
     VisAppBus::sendEvent("LoginUserChange");
     GlobalParam->hardwareParam.fileName = frameCore->configDirPath + "hardwareParam.ini";
     GlobalParam->systemParam.fileName = frameCore->configDirPath + "systemParam.ini";
-    GlobalParam->recipeProduct.curProduct = "12324";
+    GlobalParam->recipeProduct.curProduct = "";
     GlobalParam->recipeProduct.productPath = frameCore->configDirPath + "/Product/";
     QDir dir;
     for(int i=0;i< GlobalParam->recipeProduct.vecRecipeNode.size();i++){
