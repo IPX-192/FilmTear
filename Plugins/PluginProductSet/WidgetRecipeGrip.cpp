@@ -49,11 +49,22 @@ int WidgetRecipeGrip::LoadRecipeFile()
     QString filename = recipeGrab.filepath + "GrabParams.xml";
     GlobalParam->LoadRecipeList(filename, recipeGrab.listRecipe, ui->comboBox_Recipe);
 
+    //curRecipe为空或不在列表时,优先当前产品对应的配方
+    QString prefer = GlobalParam->recipeProduct.GetCurProductRecipe("recipeGrip");
+    if (recipeGrab.curRecipe.isEmpty() || !recipeGrab.listRecipe.contains(recipeGrab.curRecipe)) {
+        int idx = recipeGrab.listRecipe.indexOf(prefer);
+        if (idx < 0) idx = 0;
+        if (idx < recipeGrab.listRecipe.size())
+            recipeGrab.curRecipe = recipeGrab.listRecipe.at(idx);
+    }
+
     filename = GlobalParam->recipeGrip.filepath + GlobalParam->recipeGrip.curRecipe + ".ini";
     VisUIParam::LoadIniToUI(filename, this, &GlobalParam->recipeGrip);
     VisUIParam::QObjectCopy(&GlobalParam->recipeGrip, &m_recipeGrip);
     ui->comboBox_Recipe->blockSignals(true);
     int index = m_recipeGrip.listRecipe.indexOf(m_recipeGrip.curRecipe);
+    if (index < 0) index = m_recipeGrip.listRecipe.indexOf(prefer);   //当前产品对应配方
+    if (index < 0) index = 0;
     ui->comboBox_Recipe->setCurrentIndex(index);
     ui->comboBox_Recipe->blockSignals(false);
     SetGripParam();

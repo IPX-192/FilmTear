@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QUrl>
 #include <QDir>
+#include "../../interface/coreinterface.h"
 
 MesHttpPost* MesHttpPost::m_instance = nullptr;
 QMap<QString, QString> MesHttpPost::m_parseErrMap;
@@ -147,9 +148,11 @@ QString MesHttpPost::SendMesPostRequestImpl(ReplyStatus reqType, const QString& 
         return outMsg;
     }
 
+    ctx.respData = reply->readAll();
+
     // 请求完成后，从 map 取出上下文并删除缓存
     MesRequestContext finishCtx = m_reqMap.take(reply);
-    QByteArray respBytes = finishCtx.respData;
+    QByteArray respBytes = ctx.respData;
     int httpCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (httpCode < 200 || httpCode >= 300)
     {
@@ -516,7 +519,7 @@ QString MesHttpPost::SendMultipartUploadRequest(const GatewayUploadHeader& heade
         HandleRequestError(reply, replyUploadSingle);
         return outMsg;
     }
-
+ctx.respData = reply->readAll();
     // 校验上下文是否存在
     if (!m_reqMap.contains(reply))
     {
@@ -531,7 +534,7 @@ QString MesHttpPost::SendMultipartUploadRequest(const GatewayUploadHeader& heade
     if (httpCode < 200 || httpCode >= 300)
     {
         outMsg = QString("上传网关响应异常，HTTP状态码：%1").arg(httpCode);
-        QByteArray errorBody = finishCtx.respData;
+        QByteArray errorBody = ctx.respData;
         if (!errorBody.isEmpty())
         {
             QString errorText = QString::fromUtf8(errorBody);
@@ -544,7 +547,7 @@ QString MesHttpPost::SendMultipartUploadRequest(const GatewayUploadHeader& heade
     }
 
     // 10. 响应空值拦截
-    QByteArray respBytes = finishCtx.respData;
+    QByteArray respBytes = ctx.respData;
     if (respBytes.isEmpty())
     {
         outMsg = "上传网关返回空数据";
@@ -610,7 +613,7 @@ void MesHttpPost::slotPostFinished(QNetworkReply *reply)
         return;
     }
     MesRequestContext& ctx = m_reqMap[reply];
-    ctx.respData = reply->readAll();
+   // ctx.respData = reply->readAll();
 }
 
 void  MesHttpPost::SaveTestLog(const QByteArray& bytedata)
@@ -797,8 +800,11 @@ QString MesHttpPost::CompleteTask(const QString& sn, bool isSuccess, const QStri
     body["processKey"] = m_processKey;
     body["number"] = sn;
     body["isSuccess"] = isSuccess ? "1" : "0";
-    body["errorCode"] = errCode;
-    body["errorInfo"] = errInfo;
+	if (!isSuccess)
+	{
+		body["errorCode"] = errCode;
+		body["errorInfo"] = errInfo;
+	}   
     body["bindMaterial"] = bindMat;
     body["mode"] = "";
     return SendMesPostRequest(replyCompleteTask, "completeTask", body, outTaskResult);

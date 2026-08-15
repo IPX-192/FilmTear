@@ -41,10 +41,20 @@ void WidgetRecipeDirty::UpdateParamToUI()
 int WidgetRecipeDirty::LoadRecipeFile()
 {
     RecipeDirty& recipeDirty = GlobalParam->recipeDirty;
+    //curRecipe为空或不在列表时,优先当前产品对应的配方
+    QString prefer = GlobalParam->recipeProduct.GetCurProductRecipe("recipeDirty");
+    if (recipeDirty.curRecipe.isEmpty() || !recipeDirty.listRecipe.contains(recipeDirty.curRecipe)) {
+        int idx = recipeDirty.listRecipe.indexOf(prefer);
+        if (idx < 0) idx = 0;
+        if (idx < recipeDirty.listRecipe.size())
+            recipeDirty.curRecipe = recipeDirty.listRecipe.at(idx);
+    }
     QString filename = recipeDirty.filepath + recipeDirty.curRecipe + ".ini";
     VisUIParam::LoadIniToUI(filename, this, &recipeDirty);
     ui->comboBox_Recipe->blockSignals(true);
     int index = recipeDirty.listRecipe.indexOf(recipeDirty.curRecipe);
+    if (index < 0) index = recipeDirty.listRecipe.indexOf(prefer);   //当前产品对应配方
+    if (index < 0) index = 0;
     ui->comboBox_Recipe->setCurrentIndex(index);
     ui->comboBox_Recipe->blockSignals(false);
     m_recipeDirty = recipeDirty;

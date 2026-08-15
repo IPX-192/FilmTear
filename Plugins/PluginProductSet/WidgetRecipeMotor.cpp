@@ -49,11 +49,21 @@ void WidgetRecipeMotor::UpdateParamToUI()
 int WidgetRecipeMotor::LoadRecipeFile()
 {
 	RecipeMotor& recipeMotor = GlobalParam->recipeMotor;
+	//curRecipe为空或不在列表时,优先当前产品对应的配方
+	QString prefer = GlobalParam->recipeProduct.GetCurProductRecipe("recipeMotor");
+	if (recipeMotor.curRecipe.isEmpty() || !recipeMotor.listRecipe.contains(recipeMotor.curRecipe)) {
+		int idx = recipeMotor.listRecipe.indexOf(prefer);
+		if (idx < 0) idx = 0;
+		if (idx < recipeMotor.listRecipe.size())
+			recipeMotor.curRecipe = recipeMotor.listRecipe.at(idx);
+	}
 	QString filename = recipeMotor.filepath + recipeMotor.curRecipe + ".xml";
 	bool bRet = VisMotorToolIns->SetPointFile(filename);
 	ShowSystemLog(bRet ? Log_Info : Log_Error, QString(u8"伺服配方文件加载%1！").arg(bRet ? u8"成功" : u8"失败"));
 	ui->comboBox_Recipe->blockSignals(true);
 	int index = recipeMotor.listRecipe.indexOf(recipeMotor.curRecipe);
+	if (index < 0) index = recipeMotor.listRecipe.indexOf(prefer);   //当前产品对应配方
+	if (index < 0) index = 0;
 	ui->comboBox_Recipe->setCurrentIndex(index);
 	ui->comboBox_Recipe->blockSignals(false);
 

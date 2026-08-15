@@ -83,12 +83,11 @@ void WidgetRecipePlatform::UpdateParamToUI()
 		listProductName << listPlatformMatrix[i].productName;
         QVector<QPair<QString,QString>>vecRecipe;
         vecRecipe.push_back(QPair<QString, QString>(u8"型号名称", listPlatformMatrix[i].productName));
+        //只按第0列(型号名称)匹配旧配方行,防止其他列出现同名配方值(如recipeDirty="AM57")导致行错配
         for (int j = 0; j < listOldRecipe.size(); j++) {
-            for(int k=0;k<listOldRecipe[j].size();k++){
-                if (listOldRecipe[j][k].second==listPlatformMatrix[i].productName) {
-                    vecRecipe = listOldRecipe[j];
-                    break;
-                }
+            if (listOldRecipe[j].size() && listOldRecipe[j][0].second == listPlatformMatrix[i].productName) {
+                vecRecipe = listOldRecipe[j];
+                break;
             }
         }
         listNewRecipe.push_back(vecRecipe);

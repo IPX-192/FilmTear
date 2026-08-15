@@ -36,7 +36,8 @@ SOURCES += \
     WidgetRecipePlatform.cpp \
     WidgetRecipeTray.cpp \
     WidgetRecipeVision.cpp \
-    WidgetRecipeDirty.cpp
+    WidgetRecipeDirty.cpp \
+    WidgetRecipeScanCode.cpp
 
 HEADERS += \
     ../../interface/coreinterface.h \
@@ -52,7 +53,8 @@ HEADERS += \
     WidgetRecipePlatform.h \
     WidgetRecipeTray.h \
     WidgetRecipeVision.h \
-    WidgetRecipeDirty.h
+    WidgetRecipeDirty.h \
+    WidgetRecipeScanCode.h
 
 LIBS += -lAdvapi32
 
@@ -72,7 +74,8 @@ FORMS += \
     WidgetRecipePlatform.ui \
     WidgetRecipeTray.ui \
     WidgetRecipeVision.ui \
-    WidgetRecipeDirty.ui
+    WidgetRecipeDirty.ui \
+    WidgetRecipeScanCode.ui
 
 win32: LIBS += -L$$PWD/../../bin/ -lVISFramePluginModel
 

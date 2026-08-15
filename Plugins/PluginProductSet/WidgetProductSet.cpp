@@ -8,6 +8,7 @@
 #include "WidgetRecipeFilmTear.h"
 #include "WidgetRecipeGrip.h"
 #include "WidgetRecipeDirty.h"
+#include "WidgetRecipeScanCode.h"
 
 #include <QMessageBox>
 
@@ -26,6 +27,7 @@ WidgetProductSet::WidgetProductSet(QWidget *parent) :
     WidgetRecipeTray*widgetTray=new WidgetRecipeTray(ui->stackedWidget);
     WidgetRecipeGrip*widgetGrip=new WidgetRecipeGrip(ui->stackedWidget);
     WidgetRecipeDirty*widgetDirty=new WidgetRecipeDirty(ui->stackedWidget);
+    WidgetRecipeScanCode*widgetScanCode=new WidgetRecipeScanCode(ui->stackedWidget);
     ui->stackedWidget->addWidget(widgetMatrix);
     ui->stackedWidget->addWidget(widgetPlatform);
     ui->stackedWidget->addWidget(widgetMotor);
@@ -34,6 +36,7 @@ WidgetProductSet::WidgetProductSet(QWidget *parent) :
     ui->stackedWidget->addWidget(widgetFilmTear);
     ui->stackedWidget->addWidget(widgetGrip);
     ui->stackedWidget->addWidget(widgetDirty);
+    ui->stackedWidget->addWidget(widgetScanCode);
 
     connect(widgetMatrix, &WidgetMatrixCfg::sigAddPlatfrom, widgetPlatform, &WidgetRecipePlatform::slotAddPlatfrom);
     connect(GlobalParam->frameCore, &QVisF_Interface::sig_OutputInfo, this, &WidgetProductSet::slot_InputInfo);

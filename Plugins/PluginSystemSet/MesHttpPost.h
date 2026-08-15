@@ -177,14 +177,12 @@ struct FixtureConsumeResult
 struct DataDetail{
     QString message = "螺丝扭力";   // 例如
     QString name = "Torque1";
-    QString result = "1";
+    QString result = "1";  // 1-成功  0-失败
     QString value = "0.5";
     QString lowerLimit = "";       // 非必填
     QString upperLimit = "";       // 非必填
     QString standard = "";          // 非必填
 };
-Q_DECLARE_METATYPE(DataDetail)
-Q_DECLARE_METATYPE(QList<DataDetail>)
 
 // 文件网关上传固定请求头结构体
 struct GatewayUploadHeader
@@ -305,11 +303,11 @@ public:
     QString ConsumeFixtureLife(const QList<FixtureConsumeItem>& consumeList, FixtureConsumeResult& outResult);
     // 校验条码是否是标准件
     QString ValidateStandardElementNumber(const QString& sn,bool& outStandard);
-    // 条码校验,pcb条码
+    // 条码校验 sn-pcb条码  outValidate-校验结果
     QString ValidateNumber(const QString& sn,bool& outValidate);
-    // 保存工序操作结果,opResult
+    // 保存工序操作结果 sn-pcb条码  opResult-本站操作结果  detailAll-数据  outMainId-不管
     QString SaveProcessOpResult(const QString& sn, int opResult, const QList<DataDetail>& detailAll, QString& outMainId);
-    // 工序过站接口(CompleteTask参数resultMainId是否使用待确定),isSuccess:本站操作结果,errInfo：错误码, bindMat填true
+    // 工序过站接口(CompleteTask参数resultMainId是否使用待确定) sn-pcb条码  isSuccess-本站操作结果  errCode-错误码  bindMat-填true  outTaskResult-返回结果
     QString CompleteTask(const QString& sn, bool isSuccess, const QString& errCode, const QString& errInfo, bool bindMat, bool& outTaskResult);
 
     // ============================================================

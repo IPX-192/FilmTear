@@ -87,10 +87,21 @@ int WidgetRecipeVision::LoadRecipeFile()
 {
     QString filename = GlobalParam->recipeVison.filepath + "Vision.xml";
     GlobalParam->LoadRecipeList(filename, GlobalParam->recipeVison.listRecipe, ui->comboBox_Recipe);
+    //curRecipe为空或不在列表时,优先当前产品对应的配方
+    QString prefer = GlobalParam->recipeProduct.GetCurProductRecipe("recipeVison");
+    if (GlobalParam->recipeVison.curRecipe.isEmpty()
+        || !GlobalParam->recipeVison.listRecipe.contains(GlobalParam->recipeVison.curRecipe)) {
+        int idx = GlobalParam->recipeVison.listRecipe.indexOf(prefer);
+        if (idx < 0) idx = 0;
+        if (idx < GlobalParam->recipeVison.listRecipe.size())
+            GlobalParam->recipeVison.curRecipe = GlobalParam->recipeVison.listRecipe.at(idx);
+    }
     VisUIParam::QObjectCopy(&GlobalParam->recipeVison, &m_recipeVison);
     m_recipeVison = GlobalParam->recipeVison;
     ui->comboBox_Recipe->blockSignals(true);
     int index = m_recipeVison.listRecipe.indexOf(m_recipeVison.curRecipe);
+    if (index < 0) index = m_recipeVison.listRecipe.indexOf(prefer);   //当前产品对应配方
+    if (index < 0) index = 0;
     ui->comboBox_Recipe->setCurrentIndex(index);
     ui->comboBox_Recipe->blockSignals(false);
 

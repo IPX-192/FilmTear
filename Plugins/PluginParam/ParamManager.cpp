@@ -24,6 +24,7 @@ ParamManager::ParamManager(QObject *parent) : QObject(parent)
 	REGISTER_RECIPE_MODULE(u8"撕膜配方", "recipeFilmTear",recipeFilmTear);
 	REGISTER_RECIPE_MODULE(u8"夹爪配方", "recipeGrip", recipeGrip);
 	REGISTER_RECIPE_MODULE(u8"脏污配方", "recipeDirty", recipeDirty);
+	REGISTER_RECIPE_MODULE(u8"扫码配方", "recipeScanCode", recipeScanCode);
 }
 
 bool ParamManager::LoadPlatformMatrix()
