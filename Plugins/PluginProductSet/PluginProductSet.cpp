@@ -25,7 +25,7 @@ void PluginProductSet::InitWidgetList(Plugin_Interface *plugin)
     plugin->iconArea = QSize(40, 40);
     plugin->iconSize = 25;
     plugin->btnHeight = 45;
-    plugin->icons << 0xf036 << 0xf249 << 0xf055 << 0xf036 << 0xf249 << 0xf055 << 0xf036 << 0xf055;
+    plugin->icons << 0xf036 << 0xf249 << 0xf055 << 0xf036 << 0xf249 << 0xf055 << 0xf036 << 0xf055 << 0xf055;
 }
 
 void PluginProductSet::InitActionList(Plugin_Interface *plugin)

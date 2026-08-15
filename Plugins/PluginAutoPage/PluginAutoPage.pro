@@ -170,4 +170,12 @@ DEPENDPATH += $$PWD/../../../3rd/VisMotorTool
 INCLUDEPATH += -L$$PWD/../../3rd/VisAnomalyDetect
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../3rd/VisAnomalyDetect/ -lVisAnomalyDetect
 
+win32: LIBS += -L$$PWD/../../3rd/VisCameraTool/ -lVisCameraTool
+INCLUDEPATH += $$PWD/../../3rd/VisCameraTool
+DEPENDPATH += $$PWD/../../3rd/VisCameraTool
+
+win32: LIBS += -L$$PWD/../../3rd/VisDataMatrixFind/ -lVisDataMatrixFind
+INCLUDEPATH += $$PWD/../../3rd/VisDataMatrixFind
+DEPENDPATH += $$PWD/../../3rd/VisDataMatrixFind
+
 DISTFILES +=

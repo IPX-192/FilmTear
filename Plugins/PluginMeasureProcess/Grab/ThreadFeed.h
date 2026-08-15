@@ -41,7 +41,7 @@ protected:
     TrayInfo  m_trayInfo;                   //流线载具信息
 
     uint64    m_trayTotalNum = 0;             //工作托盘计数
-    const uint    m_indexHolderTrayWork = 3;   //壳体托盘开始作业序号
+    const uint    m_indexHolderTrayWork = 5;   //壳体托盘开始作业序号
 
     bool      m_clearFlag = false;             //清料标志
     uint64    m_emptyPCBTray = 0;              //清料状态空PCB盘计数

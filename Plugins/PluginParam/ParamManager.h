@@ -40,6 +40,7 @@ public:
     RecipeFilmTear    recipeFilmTear;
     RecipeGrip        recipeGrip;
     RecipeDirty       recipeDirty;
+    RecipeScanCode    recipeScanCode;
     HardwareParam     hardwareParam;
     SystemParam       systemParam;
 signals:
