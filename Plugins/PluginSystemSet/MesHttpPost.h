@@ -233,7 +233,8 @@ enum ReplyStatus {
     replyConsumeFixtureLife,
     replyValidateStandardElementNumber,
     replyUploadSingle,
-    replySaveProductFilePath
+    replySaveProductFilePath,
+    replyStartProduction
 };
 
 // 请求上下文
@@ -305,6 +306,8 @@ public:
     QString ValidateStandardElementNumber(const QString& sn,bool& outStandard);
     // 条码校验 sn-pcb条码  outValidate-校验结果
     QString ValidateNumber(const QString& sn,bool& outValidate);
+    // 启动生产任务 sn-连板首码  boardNum-连板数  outResult-启动结果(条码校验前调用)
+    QString StartProduction(const QString& sn, int boardNum, bool& outResult);
     // 保存工序操作结果 sn-pcb条码  opResult-本站操作结果  detailAll-数据  outMainId-不管
     QString SaveProcessOpResult(const QString& sn, int opResult, const QList<DataDetail>& detailAll, QString& outMainId);
     // 工序过站接口(CompleteTask参数resultMainId是否使用待确定) sn-pcb条码  isSuccess-本站操作结果  errCode-错误码  bindMat-填true  outTaskResult-返回结果
@@ -355,6 +358,7 @@ public:
     bool ReplyJsonFromValidateStandardElementNumber(QJsonObject& jsonObject,bool& outStandard);
     bool ReplyJsonFromUploadSingle(QJsonObject& jsonObject, UploadFileResp& outUploadResp);
     bool ReplyJsonFromSaveProductFilePath(QJsonObject& jsonObject,bool& outSave);
+    bool ReplyJsonFromStartProduction(QJsonObject& jsonObject,bool& outResult);
 
 public:
     // 有返回结构体，传引用

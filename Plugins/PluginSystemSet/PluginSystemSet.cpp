@@ -71,6 +71,16 @@ int PluginSystemSet::event_ShowLogin()
 int PluginSystemSet::event_MesValidateNumber(QString sn, bool& outValidate)
 {
     outValidate = false;
+    //验证打印:请求实际地址(基址+接口名)
+    ShowSystemLog(Log_Info, QString(u8"条码校验请求地址:%1validateNumber").arg(MesHttpPost::Instance()->GetMesBaseUrl()));
+    //条码校验前先启动生产任务
+    bool startResult = false;
+    QString startErr = MesHttpPost::Instance()->StartProduction(sn, 0, startResult);   //boardNum连板数固定1
+    if (!startErr.isEmpty() || !startResult) {
+        ShowSystemLog(Log_Error, QString(u8"启动生产任务失败:%1").arg(startErr.isEmpty() ? u8"result=false" : startErr));
+        return -1;
+    }
+    ShowSystemLog(Log_Info, QString(u8"启动生产任务成功:%1").arg(sn));
     QString errMsg = MesHttpPost::Instance()->ValidateNumber(sn, outValidate);
     if (!errMsg.isEmpty()) {
         ShowSystemLog(Log_Error, QString(u8"条码校验失败:%1").arg(errMsg));

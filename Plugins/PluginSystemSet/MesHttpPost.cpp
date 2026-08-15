@@ -102,7 +102,12 @@ QString MesHttpPost::SendMesPostRequestImpl(ReplyStatus reqType, const QString& 
             || reqType == replyUserInfoAuth
             || reqType == replyQueryDeviceProcessInfo )
         autoToken = true;
-    QString fullUrl = GetMesBaseUrl(autoToken) + apiPath;
+    // startProduction 接口使用 hirain 前缀,其余接口用 auto 前缀
+    QString fullUrl;
+    if (reqType == replyStartProduction)
+        fullUrl = QString("http://%1/mes/service/hirain/%2").arg(MesUrl).arg(apiPath);
+    else
+        fullUrl = GetMesBaseUrl(autoToken) + apiPath;
     QUrl targetUrl(fullUrl);
     QNetworkRequest netReq(targetUrl);
     netReq.setRawHeader("Content-Type", "application/json;charset=utf-8");
@@ -117,7 +122,8 @@ QString MesHttpPost::SendMesPostRequestImpl(ReplyStatus reqType, const QString& 
         replySaveProcessOpResult, replyCompleteTask,
         replyStationHeartbeat,replyValidateDeviceUseFixture, replyBindFixtureChannel,
         replyConsumeFixtureLife, replyValidateStandardElementNumber,
-        replyUploadSingle, replySaveProductFilePath
+        replyUploadSingle, replySaveProductFilePath,
+        replyStartProduction
     };
     if (needProcessKeyHeader.contains(reqType) && !m_processKey.isEmpty())
     {
@@ -265,6 +271,18 @@ QString MesHttpPost::SendMesPostRequestImpl(ReplyStatus reqType, const QString& 
         }
         auto& ref = *static_cast<bool*>(outData);
         parseSuccess = ReplyJsonFromValidateNumber(jsonObj,ref);
+        break;
+    }
+    case replyStartProduction:
+    {
+        if (!outData)
+        {
+            m_parseErrMap[reqKey] = "输出布尔指针为空";
+            parseSuccess = false;
+            break;
+        }
+        auto& ref = *static_cast<bool*>(outData);
+        parseSuccess = ReplyJsonFromStartProduction(jsonObj, ref);
         break;
     }
     case replySaveProcessOpResult:
@@ -769,6 +787,15 @@ QString MesHttpPost::ValidateNumber(const QString& sn,bool& outValidate)
     body["mode"] = "";
     body["processKey"] = m_processKey;
     return SendMesPostRequest(replyValidateNumber, "validateNumber", body,outValidate);
+}
+
+QString MesHttpPost::StartProduction(const QString& sn, int boardNum, bool& outResult)
+{
+    QJsonObject body;
+    body["number"] = sn;
+    //body["boardNum"] = boardNum;
+    body["processKey"] = m_processKey;
+    return SendMesPostRequest(replyStartProduction, "startProduction", body, outResult);
 }
 
 QString MesHttpPost::SaveProcessOpResult(const QString& sn, int opResult, const QList<DataDetail> &detailAll, QString& outMainId)
@@ -1408,5 +1435,34 @@ bool MesHttpPost::ReplyJsonFromSaveProductFilePath(QJsonObject& jsonObject, bool
         return false;
     }
     outSave = contentVal.toBool();
+    return true;
+}
+
+bool MesHttpPost::ReplyJsonFromStartProduction(QJsonObject& jsonObject, bool& outResult)
+{
+    outResult = false;
+    QString logtxt = "ReplyJsonFromStartProduction:\n" + QJsonDocument(jsonObject).toJson();
+    SaveTestLog(logtxt.toLocal8Bit());
+
+    QString status = jsonObject["status"].toString();
+    if (status != "PASS")
+    {
+        m_parseErrMap[QString::number((int)(replyStartProduction))] = jsonObject["message"].toString("启动生产任务失败,无错误描述");
+        return false;
+    }
+    QJsonValue contentVal = jsonObject["content"];
+    if (!contentVal.isObject())
+    {
+        m_parseErrMap[QString::number((int)(replyStartProduction))] = "启动生产任务返回content非对象";
+        return false;
+    }
+    QJsonObject contentObj = contentVal.toObject();
+    QJsonValue resultVal = contentObj["result"];
+    if (!resultVal.isBool())
+    {
+        m_parseErrMap[QString::number((int)(replyStartProduction))] = "content内result非布尔值";
+        return false;
+    }
+    outResult = resultVal.toBool();
     return true;
 }
