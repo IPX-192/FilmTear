@@ -24,7 +24,7 @@ WidgetBtnPanel::WidgetBtnPanel(QWidget *parent) :
 //        VisAppBus::sendEvent("ClearModule");
 //        ui->btnReset->setEnabled(true);
 //        m_autoModel->setEnabled(true);
-        VisAppBus::sendEvent("SetBackFlowReady");
+        VisAppBus::sendEvent("SetBackFlowReady", true, QString());   //手动放盘后通知回流托盘就绪(无托盘码)
     });
     VisAppBus::subscibeEvent(this, "SetMachineStatus");
 }

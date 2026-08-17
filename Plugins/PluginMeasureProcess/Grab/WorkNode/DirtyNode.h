@@ -21,6 +21,7 @@ public:
     static int  event_TestDetect(int station);
     static EAD_Handle s_detector;
     static bool       s_initialized;
+    static bool       s_initAttempted;   //已尝试过初始化(成功或失败),避免每个料重复重试
 
 
 protected:
