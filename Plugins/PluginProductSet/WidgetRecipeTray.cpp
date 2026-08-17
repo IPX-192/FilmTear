@@ -116,8 +116,8 @@ int WidgetRecipeTray::LoadRecipeFile()
     GlobalParam->recipeTray.ReadTrayFile(filename,this);
     m_recipeTray = GlobalParam->recipeTray;
     ui->comboBox_Recipe->blockSignals(true);
-    int index = m_recipeTray.listRecipe.indexOf(m_recipeTray.curRecipe);
-    if (index < 0) index = m_recipeTray.listRecipe.indexOf(prefer);   //当前产品对应配方
+    int index = GlobalParam->recipeTray.listRecipe.indexOf(GlobalParam->recipeTray.curRecipe);
+    if (index < 0) index = GlobalParam->recipeTray.listRecipe.indexOf(prefer);   //当前产品对应配方
     if (index < 0) index = 0;
     ui->comboBox_Recipe->setCurrentIndex(index);
     ui->comboBox_Recipe->blockSignals(false);
@@ -334,8 +334,8 @@ void WidgetRecipeTray::on_btnCalcuTrayPos_clicked()
     if(curVecPos->size()==1)return;
     QVector4D posA = curVecPos->at(0);
     QString curProductName = GlobalParam->recipeProduct.curProduct;
-    if (curProductName.contains("EQ4")) {
-        //新逻辑:第一行所有点实测(X方向间距不均匀),行间等距,用第一行第一个+最后一排第一个算出所有行
+    if (curProductName.contains("EQ4") || curProductName.contains("AM") || curProductName.contains("EQ6")) {
+        //新逻辑(当前EQ4-100/AM57/EQ6-120):第一行所有点实测(X方向间距不均匀),行间等距,用第一行第一个+最后一排第一个算出所有行
         QVector4D posC = curVecPos->at((rows - 1) * cols);   //最后一排第一个
         double rowSpanX = 0, rowSpanY = 0, rowSpanZ = 0;
         if (rows > 1) {

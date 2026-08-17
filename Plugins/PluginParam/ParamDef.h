@@ -84,14 +84,14 @@ struct TrayInfo {
 // 2. 重载序列化操作符 (写入流)
 inline QDataStream& operator<<(QDataStream& out, const TrayInfo& data) {
 	// 按顺序写入结构体成员
-    out << data.trayCode << data.empty << data.result << data.holderBarCode << data.pcbBarCode << data.lensBarCode << data.errInfo << data.productEnd;
+    out << data.trayCode << data.empty << data.result << data.holderBarCode << data.pcbBarCode << data.lensBarCode << data.errInfo;
 	return out;
 }
 
 // 3. 重载反序列化操作符 (从流读出)
 inline QDataStream& operator>>(QDataStream& in, TrayInfo& data) {
 	// 严格按照写入的顺序读出
-    in >> data.trayCode >> data.empty >> data.result >> data.holderBarCode >> data.pcbBarCode >> data.lensBarCode >> data.errInfo >> data.productEnd;
+    in >> data.trayCode >> data.empty >> data.result >> data.holderBarCode >> data.pcbBarCode >> data.lensBarCode >> data.errInfo;
 	return in;
 }
 
@@ -144,6 +144,22 @@ public:
  	MatrixSetting*   curMatrix=nullptr;
     QString          curProduct = "AM57";       //当前产品型号
     void  UpdateRecipe();
+    //当前产品对应的配方名(Recipe.xml中product节点的recipeXxx属性值),未配置返回空
+    QString  GetCurProductRecipe(const QString& objName) const
+    {
+        QString productName = (curMatrix != nullptr) ? curMatrix->productName : curProduct;
+        for (int i = 0; i < vecRecipeDetail.size(); i++) {
+            const QVector<QPair<QString, QString>>& groupRecipe = vecRecipeDetail[i];
+            if (groupRecipe.isEmpty()) continue;
+            if (groupRecipe.at(0).second != productName) continue;
+            for (int j = 0; j < groupRecipe.size(); j++) {
+                if (groupRecipe.at(j).first == objName)
+                    return groupRecipe.at(j).second;
+            }
+            break;
+        }
+        return QString();
+    }
 };
 
 
@@ -196,6 +212,19 @@ public:
     //具体托盘点位坐标
     QVector<QVector4D> feedTrayPosHolder;
     QVector<QVector4D> feedTrayPosPCB;
+};
+
+//扫码配方(独立配方,仅PCB扫码DataMatrix识别ROI四个参数)
+class PARAMMANAGER_EXPORT RecipeScanCode : public IRecipeBase
+{
+    Q_OBJECT
+public:
+    RecipeScanCode &operator=(const RecipeScanCode&);
+
+    Property_Var(int, roiX, 0)   //ROI X(相机图像坐标)
+    Property_Var(int, roiY, 0)   //ROI Y
+    Property_Var(int, roiW, 0)   //ROI 宽
+    Property_Var(int, roiH, 0)   //ROI 高
 };
 
 //夹爪配方
@@ -345,7 +374,7 @@ public:
 
    // PropertyVar(QString,serverIp)
     Property_Var(QString,preDeviceIp,"10.182.5.12")
-    Property_Var(QString,nextDeviceIp,"10.255.48.21")
+    Property_Var(QString,nextDeviceIp,"10.90.66.16")
     ShieldParam shieldParam;
 };
 
@@ -368,5 +397,6 @@ struct ModuleInfo
 
 Q_DECLARE_METATYPE(ModuleInfo)
 Q_DECLARE_METATYPE(std::vector<ModuleInfo>)
+Q_DECLARE_METATYPE(cv::Mat)
 
 #endif // PARAMDEF_H

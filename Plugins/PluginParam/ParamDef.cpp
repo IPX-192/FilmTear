@@ -25,10 +25,19 @@ RecipeTray &RecipeTray::operator=(const RecipeTray &other)
 
 bool RecipeTray::ReadTrayFile(QString filename,QObject* uiObj)
 {
+	//保护元数据属性:LoadIniToUI可能把ini里的键覆盖filepath/curRecipe/listRecipe
+	QString filepathSave = filepath;
+	QString curRecipeSave = curRecipe;
+	QStringList listSave = listRecipe;
+
 	QSettings settings(filename, QSettings::IniFormat);
 	settings.beginGroup("Param");
 	VisUIParam::LoadIniToUI(&settings, uiObj, this);
 	settings.endGroup();
+	filepath = filepathSave;
+	curRecipe = curRecipeSave;
+	listRecipe = listSave;
+
     feedTrayPosHolder.resize(trayRowsHolder * trayColsHolder);
     for (int j = 0; j < feedTrayPosHolder.size(); j++) {
         QStringList listValue = settings.value(QString("HolderTray%1/Pos_%2").arg(1).arg(j + 1)).toString().split(" ");
@@ -47,10 +56,19 @@ bool RecipeTray::ReadTrayFile(QString filename,QObject* uiObj)
 
 void RecipeTray::WriteTrayFile(QString filename,QObject* uiObj)
 {
+	//保护元数据属性:SaveUIToIni可能把filepath/curRecipe/listRecipe写入ini造成污染
+	QString filepathSave = filepath;
+	QString curRecipeSave = curRecipe;
+	QStringList listSave = listRecipe;
+
 	QSettings settings(filename, QSettings::IniFormat);
 	settings.beginGroup("Param");
 	VisUIParam::SaveUIToIni(&settings, uiObj, this);
 	settings.endGroup();
+	filepath = filepathSave;
+	curRecipe = curRecipeSave;
+	listRecipe = listSave;
+
     for (int j = 0; j < feedTrayPosHolder.size(); j++) {
         QString strValue = QString("%1 %2 %3 %4").arg(feedTrayPosHolder[j].x()).arg(feedTrayPosHolder[j].y()).arg(feedTrayPosHolder[j].z()).arg(feedTrayPosHolder[j].w());
         settings.setValue(QString("HolderTray%1/Pos_%2").arg(1).arg(j + 1), strValue);
@@ -59,6 +77,7 @@ void RecipeTray::WriteTrayFile(QString filename,QObject* uiObj)
 		QString strValue = QString("%1 %2 %3 %4").arg(feedTrayPosPCB[j].x()).arg(feedTrayPosPCB[j].y()).arg(feedTrayPosPCB[j].z()).arg(feedTrayPosPCB[j].w());
 		settings.setValue(QString("PCBTray%1/Pos_%2").arg(1).arg(j + 1), strValue);
 	}
+	settings.sync();
 }
 
 RecipeVision &RecipeVision::operator=(const RecipeVision &other)
@@ -69,6 +88,13 @@ RecipeVision &RecipeVision::operator=(const RecipeVision &other)
 }
 
 RecipeFilmTear &RecipeFilmTear::operator=(const RecipeFilmTear &other)
+{
+    QObject* src = (QObject*) & other;
+    VisUIParam::QObjectCopy(src, this);
+    return *this;
+}
+
+RecipeScanCode &RecipeScanCode::operator=(const RecipeScanCode &other)
 {
     QObject* src = (QObject*) & other;
     VisUIParam::QObjectCopy(src, this);
